@@ -1,0 +1,118 @@
+{
+  "source_id": "internal.clinic.resp_visits_daily",
+  "kind": "internal",
+  "title": "Respiratory visits (daily, by district)",
+  "summary": "Daily counts of respiratory clinic visits per district of residence, held in the Valdena Health Office Azure warehouse (approx. 40,000 rows per catalog). Columns are visit_date, district and visit_count, with no patient identifiers per the catalog. Coverage is documented from 2022-01-01 with no end date, refreshed daily (last refreshed 2026-10-14), so it spans the production window 2024-2025 for need N4 (daily counts by district). Use is permitted for this surveillance analysis by the clinic data policy, which allows only these aggregated counts and not patient-level records.",
+  "schema": {
+    "documented": "structured",
+    "field_count": 3,
+    "fields": [
+      {
+        "name": "visit_date",
+        "type": "date",
+        "description": "Day of the visits",
+        "unit": "day",
+        "pii": false
+      },
+      {
+        "name": "district",
+        "type": "string",
+        "description": "District of residence",
+        "unit": null,
+        "pii": false
+      },
+      {
+        "name": "visit_count",
+        "type": "integer",
+        "description": "Respiratory visits that day",
+        "unit": "visits",
+        "pii": false
+      }
+    ],
+    "notes": "Catalog lists three columns only. Respiratory diagnosis definition, district code scheme and small-cell suppression rule are not documented."
+  },
+  "temporal": {
+    "start": "2022-01-01",
+    "end": null,
+    "grain": "daily",
+    "metadata_last_updated": "2026-10-14",
+    "open_ended": true,
+    "refresh_cadence": "daily"
+  },
+  "spatial": {
+    "coverage": [
+      "IT"
+    ],
+    "code_system": "free-text district name or code (scheme not documented)",
+    "notes": "Local Valdena districts by district of residence. Scheme and any boundary changes not documented in catalog or wiki."
+  },
+  "ownership": {
+    "owner": "Clinical Analytics",
+    "publisher": null,
+    "steward": "Chiara Conti"
+  },
+  "licence": {
+    "name": "internal",
+    "agreement_status": null,
+    "attribution_text": null,
+    "commercial_use": "not_applicable",
+    "evidence": "catalog classification 'internal' (get_catalog_entry internal.clinic.resp_visits_daily); wiki clinic_data_policy (owner Data Protection Office, last edited 2025-02-01) permits use of daily district counts for this purpose",
+    "mixed_sources": false,
+    "url": null
+  },
+  "access": {
+    "method": "warehouse_sql",
+    "auth_required": true,
+    "reachable": null,
+    "classification": "internal",
+    "approx_size_bytes": null,
+    "request_process": "Request to Clinical Analytics (catalog access.request_process). Not probed: store access was not tested."
+  },
+  "declared_metadata": {
+    "contains_pii": false,
+    "status": "active",
+    "classification": "internal",
+    "grain": "daily",
+    "row_count_approx": 40000,
+    "refresh_cadence": "daily"
+  },
+  "documentation_excerpts": [
+    "Respiratory clinic visits counted per day and per district. Contains no patient identifiers. (catalog clinic.resp_visits_daily)",
+    "Only daily counts by district (`clinic.resp_visits_daily`) may be used for this purpose. (wiki clinic_data_policy, last edited 2025-02-01)",
+    "Patient postcode and age band are personal data. They must not leave the clinic systems for analysis. (wiki clinic_data_policy)"
+  ],
+  "quality_notes": [
+    "Owner conflict: catalog says owner Clinical Analytics; wiki clinic_data_policy (2025-02-01) is owned by Data Protection Office. Both recorded; the policy governs permitted use.",
+    "Respiratory diagnosis definition (codes) is not documented in the catalog entry.",
+    "Small-cell suppression rule is not documented; small district-day counts may be unsuppressed.",
+    "District scheme and boundary changes are not documented.",
+    "Values are visit counts, not unique patients; whether a patient with several visits on one day is counted more than once is not documented.",
+    "Row count of about 40,000 (approximate) from 2022 is consistent with daily x district but the number of districts is not stated.",
+    "Catalog lists last_refreshed 2026-10-14 and exported 2026-10-14; the production window ends 2025-12-31, so coverage of 2024-2025 is complete per catalog start date, but completeness of individual days is not verified."
+  ],
+  "sample_findings": [],
+  "provenance": [
+    {
+      "claim": "Catalog entry: daily respiratory visit counts by district, no patient identifiers, columns visit_date, district, visit_count, owner Clinical Analytics, steward Chiara Conti, coverage from 2022-01-01 with null end, refresh daily, last refreshed 2026-10-14, approx 40,000 rows, access warehouse_sql by request",
+      "evidence": "get_catalog_entry internal.clinic.resp_visits_daily"
+    },
+    {
+      "claim": "Clinic data policy permits only daily district counts for this analysis and bars patient-level records and personal postcode/age band from leaving clinic systems",
+      "evidence": "read_wiki_page clinic_data_policy (owner Data Protection Office, last edited 2025-02-01)"
+    },
+    {
+      "claim": "Patient-level table clinic.patient_visits is excluded by policy, so it is not a fallback for this source",
+      "evidence": "read_wiki_page clinic_data_policy; search_internal_catalog 'respiratory visits daily by district clinic data policy'"
+    }
+  ],
+  "unknowns": [
+    "Respiratory diagnosis definition / ICD codes used",
+    "Small-cell suppression rule",
+    "Number of districts and district coding scheme; any boundary changes over time",
+    "Whether visits or patients are counted per visit (double counting of same-day repeat visits)",
+    "Store reachability and actual access grant from Clinical Analytics (not probed)",
+    "Day-level completeness and any reporting lags for 2024-2025",
+    "Whether the client's data-sharing basis for this use is formally confirmed (candidate notes this as to be confirmed)",
+    "Whether the district field is the district of residence in all rows (catalog says so; not verified in data)"
+  ]
+}

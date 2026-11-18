@@ -1,0 +1,42 @@
+{
+  "reviewer": "Prathyusha Velur",
+  "verdict": "proceed_with_conditions",
+  "conditions": [
+    {
+      "text": "Obtain Legal sign-off on Open-Meteo production use and mixed upstream terms",
+      "owner": "Legal",
+      "due": "2026-11-25"
+    },
+    {
+      "text": "Confirm station VR-03 status after 2024-06-30 and supply station lookup",
+      "owner": "Environment Monitoring Unit",
+      "due": "2026-11-20"
+    },
+    {
+      "text": "Supply Valdena coordinates for Open-Meteo reanalysis queries",
+      "owner": "Valdena Civic Health Office",
+      "due": "2026-11-20"
+    }
+  ],
+  "agreements": [
+    {
+      "source_id": "api.open_meteo_archive",
+      "reason": "Agree it serves N3 hourly temperature and humidity across prototype and production once Valdena coordinates and Legal sign-off are obtained."
+    },
+    {
+      "source_id": "link.data_open_air_chicago_hour_aggre_d4970b",
+      "reason": "Agree Chicago US air-quality link is not feasible due to allowlist refusal (DOMAIN_NOT_ALLOWLISTED) and geography mismatch (US vs IT)."
+    }
+  ],
+  "overrides": [
+    {
+      "source_id": "link.uci_360",
+      "reason": "Agree it is feasible_with_conditions strictly for prototype benchmarking (N1/N3), provided all -200 sentinels are masked and Legal clears the research-only note."
+    }
+  ],
+  "traced_conclusion": {
+    "source_id": "api.open_meteo_archive",
+    "record_field": "spatial.notes",
+    "could_change_if": "Valdena Civic Health Office supplies exact station coordinates overriding the placeholder Milan coordinates and confirms reanalysis is acceptable for the live warning model."
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "candidates": [
+    {
+      "source_id": "internal.airq.station_readings",
+      "kind": "internal",
+      "title": "City station readings (hourly)",
+      "need_ids": [
+        "N1"
+      ],
+      "target_windows": [
+        "production"
+      ],
+      "why_relevant": "Only internal hourly NO2 and PM2.5 source from the city's own stations; catalog coverage starts 2023-01-01 with hourly refresh and timestamps in UTC (ts_utc), so it spans the production window 2024-01-01 to 2025-12-31. Not usable for the prototype window (2004-2005).",
+      "found_via": "search_internal_catalog; get_catalog_entry; read_wiki_page station_network",
+      "suspected_issues": [
+        "Wiki station_network (last_edited 2024-07-01): station VR-03 (Via Roma) switched off 2024-06-30 with no readings after that, but the catalog still lists the network as active",
+        "Catalog has no pollutant method or station-location fields; station coordinates not documented in the entry",
+        "Access is by request to Environment Monitoring Unit; the status of the city's data request is not documented in the sources read"
+      ]
+    },
+    {
+      "source_id": "internal.traffic.hourly_counts",
+      "kind": "internal",
+      "title": "Road traffic counts (hourly)",
+      "need_ids": [
+        "N2"
+      ],
+      "target_windows": [
+        "production"
+      ],
+      "why_relevant": "Only internal hourly vehicle counts from road counters described as near the monitoring stations; catalog coverage from 2021-01-01 spans 2024-2025.",
+      "found_via": "search_internal_catalog; get_catalog_entry; read_wiki_page counter_replacement_2024",
+      "suspected_issues": [
+        "Wiki counter_replacement_2024 (last_edited 2024-04-02): counters replaced 2024-03-18; counts were per direction before and both directions combined after. Catalog has no note; comparisons across the change need adjustment",
+        "Timestamps are local time (ts_local), not UTC; DST handling needs checking",
+        "No counter-to-station distance mapping documented in the catalog entry",
+        "Sensor outage coding (zero vs missing) not documented"
+      ]
+    },
+    {
+      "source_id": "internal.clinic.resp_visits_daily",
+      "kind": "internal",
+      "title": "Respiratory visits (daily, by district)",
+      "need_ids": [
+        "N4"
+      ],
+      "target_windows": [
+        "production"
+      ],
+      "why_relevant": "Daily respiratory visit counts by district with no patient identifiers, which the clinic data policy explicitly allows for this analysis; coverage from 2022-01-01 spans 2024-2025.",
+      "found_via": "search_internal_catalog; get_catalog_entry; read_wiki_page clinic_data_policy",
+      "suspected_issues": [
+        "Catalog does not document the respiratory diagnosis definition (codes) or the small-cell suppression rule",
+        "District scheme and any boundary changes are not documented",
+        "Visit counts, not unique patients; double counting not addressed in the entry",
+        "Access is by request to Clinical Analytics; client data-sharing basis to be confirmed"
+      ]
+    },
+    {
+      "source_id": "api.open_meteo_archive",
+      "kind": "public_api",
+      "title": "Open-Meteo Historical Weather API (reanalysis)",
+      "need_ids": [
+        "N3"
+      ],
+      "target_windows": [
+        "prototype",
+        "production"
+      ],
+      "why_relevant": "Register entry for hourly temperature and humidity in both windows; approved for prototyping and production. Gridded reanalysis, not station observations, so it is a fallback rather than the preferred source.",
+      "found_via": "list_external_register",
+      "suspected_issues": [
+        "Register default coordinates are Lisbon (38.72, -9.14); must be overridden with the justified Italian city location, which no source in the brief or catalog names, so the location is an open assumption for decisions.md",
+        "Reanalysis grid cell, not station observations; urban/rural averaging",
+        "Register default variables are temperature_2m and shortwave_radiation; relative humidity must be requested explicitly",
+        "Terms URL (https://open-meteo.com/en/licence) not read in this scouting pass"
+      ]
+    },
+    {
+      "source_id": "api.nager_public_holidays",
+      "kind": "public_api",
+      "title": "Nager.Date public holidays API",
+      "need_ids": [
+        "N4"
+      ],
+      "target_windows": [
+        "production"
+      ],
+      "why_relevant": "Italian public-holiday calendar as a covariate for daily clinic counts (weekend/holiday effects named in the plan). It does not supply N4 counts itself.",
+      "found_via": "list_external_register",
+      "suspected_issues": [
+        "Terms are on GitHub (https://github.com/nager/Nager.Date); not read in this pass",
+        "Covers holidays only; regional or local closures not covered"
+      ]
+    },
+    {
+      "source_id": "link.uci_360",
+      "kind": "dataset_link",
+      "title": "Dataset link: https://archive.ics.uci.edu/dataset/360/air+quality",
+      "location": "https://archive.ics.uci.edu/dataset/360/air+quality",
+      "canonical_ref": "uci:360",
+      "need_ids": [
+        "N1"
+      ],
+      "target_windows": [
+        "prototype"
+      ],
+      "why_relevant": "Public hourly air-quality readings from an Italian city, 2004-2005. Check the city, the period and the missing-value coding.",
+      "found_via": "human input",
+      "suspected_issues": []
+    },
+    {
+      "source_id": "link.europa_sdg_11_52_099aa6",
+      "kind": "dataset_link",
+      "title": "Dataset link: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_11_52?format=JSON&",
+      "location": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_11_52?format=JSON&lang=EN&geo=IT",
+      "canonical_ref": "ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_11_52?format=JSON&geo=IT&lang=EN",
+      "need_ids": [
+        "N6"
+      ],
+      "target_windows": [
+        "prototype",
+        "production"
+      ],
+      "why_relevant": "Eurostat yearly deaths linked to PM2.5, Italy. National context only.",
+      "found_via": "human input",
+      "suspected_issues": []
+    },
+    {
+      "source_id": "link.data_open_air_chicago_hour_aggre_d4970b",
+      "kind": "dataset_link",
+      "title": "Dataset link: https://catalog.data.gov/dataset/open-air-chicago-hour-aggregations",
+      "location": "https://catalog.data.gov/dataset/open-air-chicago-hour-aggregations",
+      "canonical_ref": "catalog.data.gov/dataset/open-air-chicago-hour-aggregations",
+      "need_ids": [
+        "N1"
+      ],
+      "target_windows": [
+        "prototype"
+      ],
+      "why_relevant": "Hourly air-quality sensor data from a US city, found while searching for more hourly data.",
+      "found_via": "human input",
+      "suspected_issues": []
+    },
+    {
+      "source_id": "link.europa_hlth_cd_iap_e7ca1d",
+      "kind": "dataset_link",
+      "title": "Dataset link: https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_cd_iap?format=JSO",
+      "location": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_cd_iap?format=JSON&lang=EN&geo=IT",
+      "canonical_ref": "ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_cd_iap?format=JSON&geo=IT&lang=EN",
+      "need_ids": [
+        "N6"
+      ],
+      "target_windows": [
+        "prototype",
+        "production"
+      ],
+      "why_relevant": "Step 2b accepted source: Eurostat parent table hlth_cd_iap (Health impacts of air pollution, Italy, annual from 2005).",
+      "found_via": "human input",
+      "suspected_issues": []
+    }
+  ],
+  "links": [
+    "https://archive.ics.uci.edu/dataset/360/air+quality",
+    "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sdg_11_52?format=JSON&lang=EN&geo=IT",
+    "https://catalog.data.gov/dataset/open-air-chicago-hour-aggregations",
+    "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_cd_iap?format=JSON&lang=EN&geo=IT"
+  ]
+}

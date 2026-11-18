@@ -1,0 +1,143 @@
+{
+  "use_case": "UC2 - Valdena Gelato Shop: do hot days and public holidays raise ice-cream sales?",
+  "objective_summary": "Decide whether the shop has enough daily sales history (2023-06-01 to 2025-05-31, plus 2025-06-01 to 2026-03-31) to measure how daily maximum temperature and Italian public holidays move ice-cream sales, which product codes can be compared across the 2024 code change, and which red flags must be fixed before a one-week-ahead order forecast is built.",
+  "need_plans": [
+    {
+      "need_id": "N1",
+      "interpretation": "Daily ice-cream sales per product for the shop, covering both windows, at daily grain (units and/or revenue per product per day), with a stable product key and shop identifier. Shop-level, not customer-level.",
+      "internal_queries": [
+        "daily sales by product ice cream",
+        "POS daily sales export gelato",
+        "gelato sales fact table daily",
+        "Valdena sales ledger product SKU per day",
+        "till receipts aggregated by day and article code"
+      ],
+      "external_data_hints": [],
+      "register_ids": [],
+      "acceptance_criteria": [
+        "Daily rows present for every calendar day in 2023-06-01..2025-05-31 and 2025-06-01..2026-03-31, or gaps explicitly documented (closed days vs missing extracts)",
+        "Product key present and documented; units of measure and currency stated",
+        "Covers the shop only; no customer-level fields",
+        "Load date / extract date recorded so late corrections can be detected"
+      ],
+      "likely_pitfalls": [
+        "Sales extracts that are summarised monthly or by receipt rather than daily",
+        "Closed days missing rather than zero, biasing averages upward",
+        "Returns, voids or discounts netted differently across years",
+        "Renamed or migrated sales tables with a superseded copy still in the catalog"
+      ]
+    },
+    {
+      "need_id": "N2",
+      "interpretation": "A static mapping table from pre-2024 product codes to post-2024 product codes (one-to-one, many-to-one or split), with effective dates, so that history can be compared product by product across the code change.",
+      "internal_queries": [
+        "product code change 2024 mapping",
+        "legacy SKU to new SKU crosswalk",
+        "article code migration gelato",
+        "codice articolo cambio 2024",
+        "product master old codes new codes"
+      ],
+      "external_data_hints": [],
+      "register_ids": [],
+      "acceptance_criteria": [
+        "Every pre-2024 code in the history window maps to a post-2024 code or is explicitly flagged as discontinued/unmapped",
+        "Effective date of the change is stated and matches the sales data",
+        "Mapping cardinality (1:1, merge, split) documented per product",
+        "Owner of the mapping identified; if no complete mapping exists, list which products can be compared like-for-like"
+      ],
+      "likely_pitfalls": [
+        "Codes that look identical but changed meaning (recycled codes)",
+        "Many-to-one merges that make product-level comparison invalid; comparison should then use product families",
+        "Mapping only in a wiki page that is out of date relative to the product master"
+      ]
+    },
+    {
+      "need_id": "N3",
+      "interpretation": "Daily maximum air temperature (degrees C) for a single, justified location in Italy (the shop's assumed city, to be recorded in decisions.md), covering both windows at daily grain.",
+      "internal_queries": [
+        "weather temperature daily shop location",
+        "temperature max daily Italy",
+        "meteo temperatura massima",
+        "Open-Meteo archive Valdena",
+        "climate observations station northern Italy"
+      ],
+      "external_data_hints": [
+        "Use the register Open-Meteo Historical Weather API (archive endpoint) with the assumed shop coordinates; request daily temperature_2m_max in the shop's local timezone (Europe/Rome), not UTC, so day boundaries match sales days"
+      ],
+      "register_ids": [
+        "api.open_meteo_archive"
+      ],
+      "acceptance_criteria": [
+        "Daily temperature_2m_max present for every day in both windows with no gaps",
+        "Coordinates and timezone recorded in decisions.md as an assumption, with the chosen city justified",
+        "Reanalysis caveat recorded (modelled grid values, not a station reading)",
+        "Lag check: archive coverage reaches 2026-03-31 or the gap is documented"
+      ],
+      "likely_pitfalls": [
+        "Default query in the register uses UTC and a 2014 probe range; both must be overridden",
+        "Using hourly data aggregated incorrectly to daily max",
+        "Reanalysis grid cell (about 10 km) may not represent the city's microclimate",
+        "Treating the register probe as the dataset itself"
+      ]
+    },
+    {
+      "need_id": "N4",
+      "interpretation": "Daily flag for Italian national public holidays (and regional holidays relevant to the shop's location if the owner wants them) for 2023 to 2026, so each sales day can be labelled holiday or not.",
+      "internal_queries": [
+        "public holidays calendar Italy",
+        "festività calendario",
+        "holiday flag shop calendar",
+        "trading calendar closed days"
+      ],
+      "external_data_hints": [],
+      "register_ids": [
+        "api.nager_public_holidays"
+      ],
+      "acceptance_criteria": [
+        "Nager.Date queried for IT for years 2023, 2024, 2025 and 2026 (2026 needed for recent window)",
+        "National holidays confirmed; regional patron-saint days flagged separately if used",
+        "Date list cross-checked against the shop's own closed days (see N5)"
+      ],
+      "likely_pitfalls": [
+        "Nager returns only the listed holidays; regional or local holidays (e.g. patron saint days) can be missing or need separate handling",
+        "Holiday that falls on a Sunday or closed day has no sales effect and must not be counted as a holiday effect without checking",
+        "Using the country code for another country"
+      ]
+    },
+    {
+      "need_id": "N5",
+      "interpretation": "Daily record of shop opening days, closures, and local events (festivals, fairs, tourist peaks) near the shop, at daily grain for both windows, used as covariates or exclusions.",
+      "internal_queries": [
+        "shop opening hours calendar",
+        "closed days shop",
+        "store closures holidays staff",
+        "local events festival calendar shop",
+        "eventi locali apertura negozio"
+      ],
+      "external_data_hints": [
+        "If internal records are missing, a human could look for the municipal events calendar of the chosen Italian city on its official open-data or comune website; must have daily dates for 2023-06 to 2026-03; treat as context only, as the register policy approves external datasets for prototyping, benchmarking and context, and production use needs Legal sign-off"
+      ],
+      "register_ids": [
+        "policy.open_data_links"
+      ],
+      "acceptance_criteria": [
+        "Opening/closing status for every day in both windows, or documented rule",
+        "Events dated at day level with location inside the assumed city",
+        "Licence of any external events source read at source and recorded; unknown stays unknown"
+      ],
+      "likely_pitfalls": [
+        "Opening hours changed over time without a dated history",
+        "Events recorded by announcement date rather than occurrence date",
+        "Closed days recorded as zero sales and confused with a low-demand day"
+      ]
+    }
+  ],
+  "open_questions": [
+    "Which Italian city (or coordinates) is the shop in? The brief asks for a justified choice recorded in decisions.md; the register probe coordinates are Lisbon and must not be used.",
+    "Is there a complete, owned mapping of pre- and post-2024 product codes, and who maintains it? Without it, which products can be compared like-for-like?",
+    "Does the shop record daily opening and closing days, and were opening hours or the trading pattern changed in the history window?",
+    "Does the owner want regional or patron-saint holidays in addition to national holidays?",
+    "Is any external events dataset acceptable for production, or only for prototyping and context, given that production use needs Legal sign-off?",
+    "Do sales extracts exist at daily grain for the full history window, or only at monthly or receipt level?"
+  ]
+}

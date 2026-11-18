@@ -1,0 +1,126 @@
+{
+  "source_id": "api.open_meteo_archive",
+  "kind": "public_api",
+  "title": "Open-Meteo Historical Weather API (reanalysis archive)",
+  "summary": "JSON REST API serving hourly historical weather for any latitude/longitude, as gridded reanalysis values rather than station observations. Probes returned hourly temperature_2m (°C) and relative_humidity_2m (%) for a 72-hour window in both the prototype period (2004-03-10 to 2004-03-12) and the production period (2024-01-01 to 2024-01-03), for a point resolved to a grid cell about 0.02 degrees from the requested coordinates (elevation 138 m). Coverage of the archive's full start date and its update lag were not established from the documentation read in this pass.",
+  "schema": {
+    "documented": "structured",
+    "field_count": 3,
+    "fields": [
+      {
+        "name": "time",
+        "description": "Hourly timestamp, ISO 8601, timezone set by request (UTC used in probes)",
+        "type": "datetime",
+        "unit": "iso8601",
+        "pii": false
+      },
+      {
+        "name": "temperature_2m",
+        "description": "Air temperature at 2 m",
+        "type": "number",
+        "unit": "°C",
+        "pii": false
+      },
+      {
+        "name": "relative_humidity_2m",
+        "description": "Relative humidity at 2 m",
+        "type": "number",
+        "unit": "%",
+        "pii": false
+      }
+    ],
+    "notes": "Response is JSON with hourly arrays keyed by variable name. Register default variables are temperature_2m and shortwave_radiation; relative humidity must be requested explicitly. Field list taken from probe responses; full variable catalogue at the docs URL was not read."
+  },
+  "temporal": {
+    "start": "2004-03-10",
+    "end": null,
+    "grain": "hourly",
+    "metadata_last_updated": null,
+    "open_ended": true,
+    "refresh_cadence": "unknown"
+  },
+  "spatial": {
+    "code_system": "decimal latitude/longitude (WGS84)",
+    "coverage": [
+      "IT"
+    ],
+    "notes": "The API is global. Coverage relevant to UC1 depends on the requested point. The register default is Lisbon (38.72, -9.14), which must be overridden. The Valdena city location is not named in any source read, so it is an open assumption. The probes used Milan-area coordinates (45.46, 9.19) only to test the endpoint, not as a location decision. Returned point: 45.448154, 9.169279."
+  },
+  "ownership": {
+    "owner": null,
+    "publisher": "Open-Meteo.com (per the licence page attribution text)",
+    "steward": null
+  },
+  "licence": {
+    "name": "CC BY 4.0",
+    "agreement_status": "not_required_open_data",
+    "commercial_use": "yes",
+    "attribution_text": "Weather data by Open-Meteo.com (with link to https://open-meteo.com/), as the licence page asks for display",
+    "evidence": "probe_url https://open-meteo.com/en/licence (HTTP 200): 'API data are offered under Attribution 4.0 International (CC BY 4.0)'. The same page lists upstream sources with different terms: C3S reanalysis is shown as '( Licence )' with no name, and some providers are CC-BY-SA (UK Met Office) or have their own licence. The archive's upstream reanalysis provider and its licence were not confirmed in this pass.",
+    "url": "https://open-meteo.com/en/licence",
+    "mixed_sources": true
+  },
+  "access": {
+    "method": "rest_api",
+    "auth_required": false,
+    "reachable": true,
+    "classification": "open",
+    "approx_size_bytes": null,
+    "request_process": "GET https://archive-api.open-meteo.com/v1/archive with latitude, longitude, start_date, end_date, hourly and timezone parameters. No key was needed in the probes. Register entry: agreement_status not_required_open_data, approved_purposes prototyping and production."
+  },
+  "declared_metadata": {
+    "has_missing_values": null,
+    "contains_pii": "no",
+    "register_agreement_status": "not_required_open_data",
+    "register_approved_purposes": "prototyping, production"
+  },
+  "documentation_excerpts": [
+    "API data are offered under Attribution 4.0 International (CC BY 4.0) (open-meteo.com/en/licence)",
+    "Weather reanalysis, air quality forecasts and elevation data from Copernicus Climate Change Service C3S ( Licence ) (open-meteo.com/en/licence)",
+    "Register docs URL: https://open-meteo.com/en/docs/historical-weather-api (not read in this pass)"
+  ],
+  "quality_notes": [
+    "Gridded reanalysis, not station observations. Values are for a grid cell and do not reflect the urban/rural station mix of the city. This is a fallback for N3, not a substitute for the city station data.",
+    "Register default coordinates are Lisbon (38.72, -9.14). A justified Italian location is needed for each use. This is an open assumption for decisions.md, not a source fact.",
+    "Register default variables do not include relative humidity. Probes showed relative_humidity_2m must be requested explicitly.",
+    "Probe responses for 2004-03-10 to 2004-03-12 and 2024-01-01 to 2024-01-03 both returned 72 hourly values per variable, with no nulls seen in the first values. A full-window completeness check was not run.",
+    "Licence is CC BY 4.0 for API data per the licence page, but upstream sources listed there carry different terms (C3S, CC-BY-SA, national licences). Confirm the archive's upstream terms before production use.",
+    "Documentation (docs URL) not read, so the exact archive start date, the update lag and any quality flags are unverified."
+  ],
+  "sample_findings": [
+    "time (hourly, ISO 8601 strings, 'YYYY-MM-DDTHH:MM'): 72 values for 2024-01-01 to 2024-01-03 and for 2004-03-10 to 2004-03-12. Hourly spacing confirmed from the first entries.",
+    "temperature_2m (°C): 2024 sample starts 5.6, 6.1, 5.0; 2004 sample starts -1.0, -1.0, -1.2. No sentinel values such as -999 or NA seen in the sampled entries.",
+    "relative_humidity_2m (%): 2024 sample starts 98, 96, 97; 2004 sample starts 85, 86, 87. Values within 0-100 in the sampled entries.",
+    "Returned elevation 138 m and grid point 45.448154, 9.169279 for the requested 45.46, 9.19. This is a reanalysis grid cell, not a station."
+  ],
+  "provenance": [
+    {
+      "claim": "Register entry: endpoint https://archive-api.open-meteo.com/v1/archive, agreement not_required_open_data, approved purposes prototyping and production, default coordinates Lisbon, default variables temperature_2m and shortwave_radiation",
+      "evidence": "list_external_register (api.open_meteo_archive)"
+    },
+    {
+      "claim": "API data licence CC BY 4.0; upstream sources with differing terms, C3S shown as unnamed licence",
+      "evidence": "probe_url https://open-meteo.com/en/licence (HTTP 200, last-modified 2026-11-18 header)"
+    },
+    {
+      "claim": "Endpoint responds for 2024-01-01 to 2024-01-03 with hourly temperature_2m and relative_humidity_2m (72 values each), elevation 138 m",
+      "evidence": "call_public_api api.open_meteo_archive (latitude 45.46, longitude 9.19, start 2024-01-01, end 2024-01-03)"
+    },
+    {
+      "claim": "Endpoint responds for 2004-03-10 to 2004-03-12 with the same variables, so the prototype window start is served",
+      "evidence": "call_public_api api.open_meteo_archive (latitude 45.46, longitude 9.19, start 2004-03-10, end 2004-03-12)"
+    },
+    {
+      "claim": "Citation and publisher name: Open-Meteo.com; software author cited as Zippenfenig, P. (2023)",
+      "evidence": "probe_url https://open-meteo.com/en/licence (citation block)"
+    }
+  ],
+  "unknowns": [
+    "Valdena city coordinates. No source names them, so the probe location is not a decision. Needs a decision in decisions.md.",
+    "Upstream reanalysis provider and its licence for the historical archive (C3S/ERA5 terms not confirmed).",
+    "Full archive start date, update lag and refresh cadence (docs at https://open-meteo.com/en/docs/historical-weather-api not read).",
+    "Owner and steward of the dataset within the client's organisation, and whether commercial use is covered by the CC BY attribution requirement in production.",
+    "Completeness of hourly values across the full prototype and production windows (only 3-day probes run).",
+    "Whether the grid-cell values are representative of the monitoring stations' environment (validation against station data not done)."
+  ]
+}

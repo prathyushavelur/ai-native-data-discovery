@@ -1,0 +1,118 @@
+{
+  "source_id": "internal.sales.products",
+  "kind": "internal",
+  "title": "Product list (current product codes only)",
+  "summary": "Internal static product master listing current product codes, product names and categories for the Retail domain, owned by Retail Operations. Approximately 64 rows at static grain, with no temporal coverage recorded. It contains only current codes and is not a mapping between pre- and post-2024 codes, so it does not meet need N2 on its own.",
+  "schema": {
+    "documented": "structured",
+    "field_count": 3,
+    "fields": [
+      {
+        "name": "product_code",
+        "type": "string",
+        "description": "Current product code",
+        "pii": false
+      },
+      {
+        "name": "product_name",
+        "type": "string",
+        "description": "Product name",
+        "pii": false
+      },
+      {
+        "name": "category",
+        "type": "string",
+        "description": "Product category",
+        "pii": false
+      }
+    ],
+    "notes": "Column list from catalog entry only; no sample taken."
+  },
+  "temporal": {
+    "start": null,
+    "end": null,
+    "grain": "static",
+    "metadata_last_updated": "2025-03-31",
+    "open_ended": null,
+    "refresh_cadence": "on change"
+  },
+  "spatial": {
+    "coverage": [
+      "IT"
+    ],
+    "code_system": "internal product codes (free text product_code, product_name)",
+    "notes": "Catalog does not state a geography; the client is an Italian shop, so IT is the use-case geography, not a documented coverage field."
+  },
+  "ownership": {
+    "owner": "Retail Operations",
+    "publisher": null,
+    "steward": "Marco Bianchi"
+  },
+  "licence": {
+    "name": "internal",
+    "agreement_status": null,
+    "attribution_text": null,
+    "commercial_use": "not_applicable",
+    "evidence": "catalog entry internal.sales.products: classification 'internal'",
+    "mixed_sources": false,
+    "url": null
+  },
+  "access": {
+    "method": "warehouse_sql",
+    "auth_required": true,
+    "reachable": null,
+    "classification": "internal",
+    "request_process": "Open to analytics roles (catalog entry)",
+    "approx_size_bytes": null
+  },
+  "declared_metadata": {
+    "status": "active",
+    "contains_pii": false,
+    "classification": "internal",
+    "row_count_approx": 64,
+    "last_refreshed": "2025-03-31",
+    "catalog_exported_at": "2026-10-14T06:00:00Z"
+  },
+  "documentation_excerpts": [
+    "Current product codes, names and categories. (catalog description)",
+    "From 2024-04-01, product codes changed. Codes ending in \"L\" were replaced by new codes. (wiki product_codes_2024, last_edited 2024-04-02)",
+    "No mapping table exists between the old and new codes. (wiki product_codes_2024)",
+    "Old and new codes can only be matched by product name, and some names are not unique. (wiki product_codes_2024)",
+    "`sales.products` lists only the current codes. (wiki product_codes_2024)"
+  ],
+  "quality_notes": [
+    "Contains only current codes; no pre-2024-04-01 (old, 'L'-ending) codes are listed, so it cannot map old to new codes by itself (wiki product_codes_2024).",
+    "No mapping table exists; the wiki says old and new codes can only be matched by product name and some names are not unique (wiki product_codes_2024, 2024-04-02). Name-based matching would be ambiguous.",
+    "Refresh metadata differs in age: catalog says last_refreshed 2025-03-31 with refresh cadence 'on change'; the wiki (last_edited 2024-04-02) predates that refresh, so the wiki's statements may not reflect the 2025 state of the list.",
+    "Catalog temporal coverage is null, so the data period is undocumented.",
+    "Catalog description and wiki both say the list is current-only; no contradiction on content, but the wiki is older than the catalog refresh.",
+    "Not sampled: the catalog gives warehouse_sql access, and no read-only sample was taken, so the actual codes and row count are unverified."
+  ],
+  "provenance": [
+    {
+      "claim": "Catalog describes the source as current product codes, names and categories, owner Retail Operations, steward Marco Bianchi, static grain, ~64 rows, last refreshed 2025-03-31, refresh 'on change', temporal coverage null.",
+      "evidence": "get_catalog_entry internal.sales.products"
+    },
+    {
+      "claim": "From 2024-04-01 codes ending in 'L' were replaced; no mapping table exists; names are the only match key and are not unique; sales.products lists only current codes.",
+      "evidence": "read_wiki_page product_codes_2024 (last_edited 2024-04-02)"
+    },
+    {
+      "claim": "Search for the 2024 code change returns the wiki page and the product list catalog entry; sales.daily_by_product uses product_code 'see the product list'.",
+      "evidence": "search_internal_catalog 'product code change 2024 mapping legacy SKU crosswalk'"
+    },
+    {
+      "claim": "Classification internal, contains_pii false, access via warehouse_sql for analytics roles.",
+      "evidence": "get_catalog_entry internal.sales.products"
+    }
+  ],
+  "unknowns": [
+    "Whether the warehouse table is reachable and what the access grant for this analyst role is (not tested).",
+    "Actual row count and content of the table (not sampled).",
+    "Whether any mapping of old codes exists elsewhere (e.g. in the till system or in sales.daily_by_product); not checked beyond the wiki statement that no mapping table exists.",
+    "Data period covered; catalog temporal coverage is null.",
+    "Whether the 2025-03-31 refresh changed the code set or added any legacy codes; not documented.",
+    "Consent or retention rules: none stated."
+  ],
+  "status": "active"
+}
