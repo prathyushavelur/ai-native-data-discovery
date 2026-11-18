@@ -1,0 +1,121 @@
+{
+  "source_id": "internal.traffic.hourly_counts",
+  "kind": "internal",
+  "title": "Road traffic counts (hourly)",
+  "summary": "Hourly vehicle counts per road counter (\"vehicles\" per counter_id per hour start, local time), described in the catalog as counters near the monitoring stations. Catalog coverage starts 2021-01-01 with no end date and is refreshed hourly; approximately 15 million rows. The Mobility Office owns it. A wiki page records that all road counters were replaced on 2024-03-18 and that counting changed from per-direction to both-directions-combined, a break the catalog entry does not mention. Not sampled: access is via warehouse SQL on request.",
+  "schema": {
+    "documented": "structured",
+    "field_count": 3,
+    "fields": [
+      {
+        "name": "counter_id",
+        "type": "string",
+        "description": "Road counter code",
+        "pii": false,
+        "unit": null
+      },
+      {
+        "name": "ts_local",
+        "type": "timestamp",
+        "description": "Hour start, local time",
+        "pii": false,
+        "unit": "local time (hour start)"
+      },
+      {
+        "name": "vehicles",
+        "type": "integer",
+        "description": "Vehicles counted in the hour",
+        "pii": false,
+        "unit": "vehicles per hour"
+      }
+    ],
+    "notes": "Three columns only. No direction field, no counter location or station mapping, no quality or outage flag, no timezone offset in the schema."
+  },
+  "temporal": {
+    "start": "2021-01-01",
+    "end": null,
+    "grain": "hourly",
+    "metadata_last_updated": "2026-10-12",
+    "open_ended": true,
+    "refresh_cadence": "hourly"
+  },
+  "spatial": {
+    "coverage": [
+      "IT"
+    ],
+    "code_system": "free-text/internal counter_id codes; no geocoding documented",
+    "notes": "Catalog says counters are 'near the monitoring stations' but no counter-to-station mapping or distances are documented. Municipality assumed to be Valdena (client city), not stated in the catalog entry."
+  },
+  "ownership": {
+    "owner": "Mobility Office",
+    "publisher": null,
+    "steward": "Luca Ferri"
+  },
+  "licence": {
+    "name": "internal",
+    "agreement_status": null,
+    "attribution_text": null,
+    "commercial_use": "not_applicable",
+    "evidence": "internal catalog entry classification 'internal' (get_catalog_entry internal.traffic.hourly_counts); no licence field present",
+    "mixed_sources": false,
+    "url": null
+  },
+  "access": {
+    "method": "warehouse_sql",
+    "auth_required": true,
+    "reachable": null,
+    "classification": "internal",
+    "approx_size_bytes": null,
+    "request_process": "Request to the Mobility Office (catalog access.request_process). Location azure://valdena-health/mobility/traffic_hourly. Reachability not tested in this profile."
+  },
+  "declared_metadata": {
+    "contains_pii": false,
+    "status": "active",
+    "grain": "hourly",
+    "row_count_approx": 15000000,
+    "last_refreshed": "2026-10-12",
+    "catalog_exported_at": "2026-10-14T06:00:00Z"
+  },
+  "documentation_excerpts": [
+    "Catalog description: 'Vehicles counted per hour by road counters near the monitoring stations.'",
+    "Catalog ts_local: 'Hour start, local time'",
+    "Wiki counter_replacement_2024 (last_edited 2024-04-02): 'On 2024-03-18 the road counters were replaced.' 'Before that date, counts were recorded per direction. From 2024-03-18, counts are both directions combined.' 'Do not compare counts across the change without adjusting for it. The catalog entry for `traffic.hourly_counts` has no note about this.'"
+  ],
+  "quality_notes": [
+    "Undocumented structural break: per the wiki (counter_replacement_2024, last_edited 2024-04-02), counts before 2024-03-18 are per direction and from 2024-03-18 are both directions combined. The catalog entry (exported 2026-10-14, last_refreshed 2026-10-12) has no note on this change and has no direction field to adjust with.",
+    "Catalog and wiki are consistent that the break is not flagged in the catalog; the wiki explicitly says so.",
+    "Timezone: ts_local is documented as local time; no UTC offset or DST handling is documented in the catalog or wiki.",
+    "No counter-to-station mapping or distance is documented; 'near the monitoring stations' is an unquantified claim.",
+    "No documented convention for sensor outages (zero vs missing vs absent row).",
+    "Coverage: catalog temporal_coverage starts 2021-01-01, so the 2021-2023 history exists but spans the 2024 break; the prototype window (2004-2005) is not covered by this source.",
+    "Sample not possible: the source is a warehouse table accessed by request, so no file sample was taken."
+  ],
+  "provenance": [
+    {
+      "claim": "Source is an hourly vehicle count table owned by the Mobility Office, steward Luca Ferri, status active, columns counter_id, ts_local, vehicles; approx 15,000,000 rows; coverage from 2021-01-01 with open end; refresh hourly, last refreshed 2026-10-12",
+      "evidence": "get_catalog_entry internal.traffic.hourly_counts"
+    },
+    {
+      "claim": "Access via warehouse_sql at azure://valdena-health/mobility/traffic_hourly, requires request to Mobility Office; contains_pii false",
+      "evidence": "get_catalog_entry internal.traffic.hourly_counts (access, location, contains_pii)"
+    },
+    {
+      "claim": "Road counters were replaced on 2024-03-18; counting changed from per direction to both directions combined; comparisons need adjustment; catalog has no note",
+      "evidence": "read_wiki_page counter_replacement_2024 (last_edited 2024-04-02)"
+    },
+    {
+      "claim": "The catalog wiki backlink to this entry is only counter_replacement_2024",
+      "evidence": "get_catalog_entry internal.traffic.hourly_counts (wiki_backlinks)"
+    }
+  ],
+  "unknowns": [
+    "Whether the Mobility Office has updated the catalog or the table since the wiki edit of 2024-04-02 (no later documentation found).",
+    "Direction-level split and how to adjust pre-2024-03-18 per-direction counts to combined totals (method not documented).",
+    "Counter locations, count of counters, and distance to the monitoring stations.",
+    "Timezone offset and DST handling of ts_local.",
+    "Outage coding (zero vs missing) and data-quality history.",
+    "Whether the table is reachable and its actual schema matches the catalog (not tested).",
+    "Whether the client's Valdena counters are the ones described; municipality not stated in the catalog.",
+    "Licence/usage terms beyond internal classification; no agreement fields."
+  ]
+}

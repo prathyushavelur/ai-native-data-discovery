@@ -1,0 +1,93 @@
+{
+  "source_id": "vendor.atmosdata_pro",
+  "kind": "vendor_feed",
+  "title": "AtmosData Pro station-grade weather feed (agreement expired, not usable)",
+  "summary": "Vendor weather observation feed listed as a station-grade production weather source for UC1 (need N3, hourly temperature and humidity, production window). The register records the contract as expired, so the feed is not usable. No data was sampled or requested, and the feed's content, grain and geographic coverage are not documented in any source read.",
+  "schema": {
+    "documented": "none",
+    "fields": [],
+    "notes": "No field documentation, docs_url or terms_url in the register entry. Candidate notes only say it is a weather observation feed. Not sampled, and not called: the API key was revoked."
+  },
+  "temporal": {
+    "start": null,
+    "end": null,
+    "grain": "unknown",
+    "metadata_last_updated": null,
+    "open_ended": null,
+    "refresh_cadence": null
+  },
+  "spatial": {
+    "code_system": null,
+    "coverage": [],
+    "notes": "Coverage not documented. The use case needs Valdena (northern Italy) station-level data; no source states that this feed covers that area."
+  },
+  "ownership": {
+    "owner": null,
+    "publisher": "AtmosData Pro (fictional vendor, per register title)",
+    "steward": null
+  },
+  "licence": {
+    "name": null,
+    "evidence": "No licence text found. The register entry has no terms_url. Contract AD-2021-114 is stated in the register agreement_detail; its terms are not on file in any source read.",
+    "agreement_status": "expired",
+    "attribution_text": null,
+    "commercial_use": "unknown",
+    "url": null,
+    "mixed_sources": null
+  },
+  "access": {
+    "method": "vendor_api (REST, guardrail: do not use)",
+    "auth_required": true,
+    "reachable": false,
+    "classification": null,
+    "approx_size_bytes": null,
+    "request_process": "Renewal of contract AD-2021-114 is pending with Procurement. No signed renewal on file. Approved purposes list is empty. Do not use the revoked key and do not seek another route to this feed."
+  },
+  "declared_metadata": {
+    "agreement_status": "expired",
+    "auth": "API key (revoked 2026-01-01)",
+    "approved_purposes": [],
+    "docs_url": null,
+    "terms_url": null
+  },
+  "documentation_excerpts": [
+    "Contract AD-2021-114 ran 2022-01-01 to 2025-12-31. Renewal is waiting on Procurement; no signed renewal on file.",
+    "API key (revoked 2026-01-01)"
+  ],
+  "quality_notes": [
+    "Guardrail finding: the agreement has expired and the API key was revoked, so the feed is not usable for any window. Access is blocked and must not be attempted.",
+    "Contract dates (2022-01-01 to 2025-12-31) are the agreement term, not the data period. The production window (2024-01-01 to 2025-12-31) falls inside the contract term, but the contract has expired, so this does not make the feed usable.",
+    "The candidate's suspected_issues say 'Renewal pending with Procurement'. The register says 'Renewal is waiting on Procurement'. Both say no signed renewal exists.",
+    "The register title marks the vendor as fictional. Treat all vendor details as scenario data."
+  ],
+  "provenance": [
+    {
+      "claim": "Agreement status is expired; contract AD-2021-114 ran 2022-01-01 to 2025-12-31; no signed renewal on file.",
+      "evidence": "list_external_register, entry vendor.atmosdata_pro, agreement_detail"
+    },
+    {
+      "claim": "API key was revoked 2026-01-01; auth is 'API key (revoked 2026-01-01)'.",
+      "evidence": "list_external_register, entry vendor.atmosdata_pro, auth"
+    },
+    {
+      "claim": "Approved purposes list is empty; docs_url and terms_url are null.",
+      "evidence": "list_external_register, entry vendor.atmosdata_pro"
+    },
+    {
+      "claim": "Feed is a station-grade weather feed that the candidate proposed for need N3 (production window).",
+      "evidence": "candidate record vendor.atmosdata_pro, need_ids N3, target_windows production, canonical_ref AD-2021-114"
+    },
+    {
+      "claim": "No feed was called or sampled, in line with the vendor_feed rule and the revoked credential.",
+      "evidence": "No call_public_api or sample_data_file invoked for vendor.atmosdata_pro"
+    }
+  ],
+  "unknowns": [
+    "Data content, variables, grain and units of the feed (no documentation available).",
+    "Geographic coverage of the feed, and whether it covers the Valdena area.",
+    "Data period actually held by the vendor (contract term is not the data period).",
+    "Licence or terms of contract AD-2021-114; whether the contract permits any use after expiry.",
+    "Vendor owner, steward and contact.",
+    "Outcome and date of the Procurement renewal; whether a renewal would restore access and on what terms."
+  ]
+}

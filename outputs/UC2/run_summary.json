@@ -1,0 +1,25 @@
+{
+  "use_case": "UC2",
+  "model": "claude-haiku-5-5",
+  "stages": {
+    "plan": 31.5,
+    "scout": 40.1,
+    "profile": 53.0,
+    "assess": 38.3,
+    "memo": 37.9
+  },
+  "totals": {
+    "llm_calls": 29,
+    "input_tokens": 300794,
+    "output_tokens": 52410,
+    "cache_read_input_tokens": 0,
+    "tool_calls": 39,
+    "tool_errors": 0,
+    "http_requests": 10,
+    "http_refused": 0
+  },
+  "warnings": [
+    "no dataset links supplied; external datasets were not assessed (README section 4)"
+  ],
+  "finished_at": "2026-11-18T06:18:22Z"
+}

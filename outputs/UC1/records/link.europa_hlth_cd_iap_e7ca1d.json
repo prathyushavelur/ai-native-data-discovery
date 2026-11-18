@@ -1,0 +1,146 @@
+{
+  "source_id": "link.europa_hlth_cd_iap_e7ca1d",
+  "kind": "dataset_link",
+  "title": "Eurostat hlth_cd_iap: Health impacts of air pollution, Italy (PM2.5, annual)",
+  "summary": "Eurostat JSON-stat table hlth_cd_iap giving annual national health-impact indicators for PM2.5 in Italy (years of life lost and premature deaths, each as number and as rate). It is annual, national (geo=IT only) and has 72 cells covering 2005 to 2023, with no missing cells in the response. It does not provide hourly pollutant, traffic, weather or clinic data, and has no 2024-2025 values.",
+  "schema": {
+    "documented": "structured",
+    "field_count": 6,
+    "fields": [
+      {
+        "name": "freq",
+        "description": "Time frequency; single value A: Annual",
+        "pii": false,
+        "type": "dimension",
+        "unit": null
+      },
+      {
+        "name": "airpol",
+        "description": "Air pollutant; single value PM2_5 (particulates < 2.5 µm)",
+        "pii": false,
+        "type": "dimension",
+        "unit": null
+      },
+      {
+        "name": "effect",
+        "description": "Health effect; YLL (years of life lost) or PMD (premature death)",
+        "pii": false,
+        "type": "dimension",
+        "unit": null
+      },
+      {
+        "name": "unit",
+        "description": "Unit of measure; NR (number) or RT (rate)",
+        "pii": false,
+        "type": "dimension",
+        "unit": "number or rate (per population, base not stated in the retrieved summary)"
+      },
+      {
+        "name": "geo",
+        "description": "Geography; single value IT: Italy",
+        "pii": false,
+        "type": "dimension",
+        "unit": null
+      },
+      {
+        "name": "time",
+        "description": "Reference year, 2005 to 2023 with 2006 absent",
+        "pii": false,
+        "type": "dimension",
+        "unit": "year"
+      }
+    ]
+  },
+  "temporal": {
+    "start": "2005-01-01",
+    "end": "2023-12-31",
+    "grain": "annual",
+    "metadata_last_updated": "2025-12-09",
+    "open_ended": null,
+    "refresh_cadence": null
+  },
+  "spatial": {
+    "coverage": [
+      "IT"
+    ],
+    "code_system": "ISO2 (Eurostat geo code IT)",
+    "notes": "National level only. No regional or district breakdown in the retrieved response."
+  },
+  "ownership": {
+    "owner": null,
+    "publisher": "Eurostat (ESTAT), per JSON-stat source field",
+    "steward": null
+  },
+  "licence": {
+    "name": null,
+    "agreement_status": "not_required_open_data (policy.open_data_links) only for prototyping, benchmarking and context; production needs Legal sign-off",
+    "attribution_text": null,
+    "commercial_use": "unknown",
+    "evidence": "probe_url on https://ec.europa.eu/eurostat/about/policies/copyright redirected to an EU Login page with no licence text. No licence statement found in inspect_dataset_link output. Eurostat is not listed in list_external_register, so no register terms apply. Licence unknown.",
+    "mixed_sources": null,
+    "url": null
+  },
+  "access": {
+    "method": "rest_api",
+    "auth_required": false,
+    "reachable": true,
+    "classification": "public",
+    "request_process": null,
+    "approx_size_bytes": 3866
+  },
+  "declared_metadata": {
+    "status_counts": "{} (no status flags)",
+    "warnings": "none",
+    "missing_cells": 0,
+    "expected_cells": 72,
+    "value_count": 72,
+    "label": "Health impacts of air pollution",
+    "updated": "2025-12-09T11:00:00+0100"
+  },
+  "documentation_excerpts": [
+    "JSON-stat label: \"Health impacts of air pollution\"; source: ESTAT; updated: 2025-12-09T11:00:00+0100 (inspect_dataset_link summary)",
+    "Dimension time: first 2005, last 2023; values include 2005, 2007, 2008 ... 2023 (no 2006) (inspect_dataset_link summary)",
+    "Dimension freq: \"A: Annual\"; airpol: \"PM2_5: Particulates < 2.5µm\"; geo: \"IT: Italy\" (inspect_dataset_link summary)"
+  ],
+  "quality_notes": [
+    "Grain is annual, so it cannot meet N1-N3 (hourly pollutant, traffic, weather) or N4-N5 (daily or event clinic data). It is relevant only to N6 (annual national PM2.5 deaths context, could priority).",
+    "Coverage does not reach the production window: data ends 2023, while production requires 2024-01-01 to 2025-12-31. No 2024 or 2025 values are in the response.",
+    "Prototype window 2004-03-10 to 2005-04-04 overlaps only 2005 in this table, and the 2005 value is a single annual figure.",
+    "The time dimension skips 2006 (values 2005, 2007 ... 2023). Expected cells are 72 and value count is 72, so the gap is in the time series itself, not a missing-cell flag. Analysts should not interpolate silently.",
+    "No separate documentation for the rate base (per what population) or for the YLL/PMD methodology was retrieved; the table only carries unit codes NR and RT.",
+    "The candidate record's why_relevant calls it an accepted Step 2b source. No licence or agreement evidence for Eurostat was found in the register, so that acceptance is not confirmed by the sources read here.",
+    "Metadata shows an update on 2025-12-09 but no refresh cadence is stated."
+  ],
+  "provenance": [
+    {
+      "claim": "Endpoint returns HTTP 200 JSON-stat 2.0 with label 'Health impacts of air pollution', source ESTAT, updated 2025-12-09, content-length 3866 bytes",
+      "evidence": "inspect_dataset_link url=https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/hlth_cd_iap?format=JSON&lang=EN&geo=IT"
+    },
+    {
+      "claim": "Time coverage 2005 to 2023 with 18 values, no 2006; 72 expected cells, 72 values, 0 missing, no status flags",
+      "evidence": "inspect_dataset_link summary.time and summary.expected_cells/value_count (same call as above)"
+    },
+    {
+      "claim": "Dimensions: freq A (annual), airpol PM2_5, effect YLL/PMD, unit NR/RT, geo IT only",
+      "evidence": "inspect_dataset_link summary.dimensions (same call)"
+    },
+    {
+      "claim": "Eurostat is not in the external register for UC1; the only open-data policy allows prototyping, benchmarking and context use, subject to the dataset's own licence",
+      "evidence": "list_external_register; policy.open_data_links"
+    },
+    {
+      "claim": "Eurostat copyright page could not be read (redirected to EU Login); no licence text found",
+      "evidence": "probe_url https://ec.europa.eu/eurostat/about/policies/copyright"
+    }
+  ],
+  "unknowns": [
+    "Licence and reuse terms for Eurostat data (not found in any source read); commercial use status unknown",
+    "Rate denominator (population base) for unit RT",
+    "Methodology and assumptions behind the YLL and PMD estimates",
+    "Reason 2006 is absent from the time series",
+    "Refresh cadence and next scheduled release date",
+    "Whether a 2024 or 2025 release is planned",
+    "Whether Legal has approved this source for production use (no Eurostat entry in the register)",
+    "Owner and steward inside the client organisation"
+  ]
+}

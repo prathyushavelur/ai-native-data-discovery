@@ -1,0 +1,160 @@
+{
+  "source_id": "api.nager_public_holidays",
+  "kind": "public_api",
+  "title": "Nager.Date public holidays API (Italy, national holidays)",
+  "summary": "REST API returning public-holiday dates per year and ISO 3166-1 alpha-2 country code. For IT it returns national holidays only (13 entries per year in the probes for 2024 and 2025), one record per date with English and local names and a global flag. Grain is one record per holiday per day, not a time series of counts; it can serve only as a calendar covariate for the daily clinic-count need (N4) in the production window, and it does not supply any clinic counts, air quality, traffic or weather.",
+  "schema": {
+    "documented": "structured",
+    "field_count": 10,
+    "fields": [
+      {
+        "name": "date",
+        "type": "date",
+        "description": "Holiday date, YYYY-MM-DD",
+        "unit": null,
+        "pii": false
+      },
+      {
+        "name": "localName",
+        "type": "string",
+        "description": "Holiday name in Italian",
+        "unit": null,
+        "pii": false
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "description": "Holiday name in English",
+        "unit": null,
+        "pii": false
+      },
+      {
+        "name": "countryCode",
+        "type": "string",
+        "description": "ISO 3166-1 alpha-2 country code",
+        "unit": null,
+        "pii": false
+      },
+      {
+        "name": "fixed",
+        "type": "boolean",
+        "description": "Whether the holiday falls on the same calendar date every year",
+        "unit": null,
+        "pii": false
+      },
+      {
+        "name": "global",
+        "type": "boolean",
+        "description": "Whether the holiday applies nationwide",
+        "unit": null,
+        "pii": false
+      },
+      {
+        "name": "counties",
+        "type": "array|null",
+        "description": "Sub-national region codes where the holiday applies; null in IT sample",
+        "unit": null,
+        "pii": false
+      },
+      {
+        "name": "launchYear",
+        "type": "integer|null",
+        "description": "Year the holiday was introduced, if known; null in IT sample",
+        "unit": null,
+        "pii": false
+      },
+      {
+        "name": "types",
+        "type": "array",
+        "description": "Holiday type, e.g. Public",
+        "unit": null,
+        "pii": false
+      }
+    ]
+  },
+  "temporal": {
+    "start": "2024-01-01",
+    "end": "2025-12-31",
+    "grain": "static",
+    "metadata_last_updated": null,
+    "open_ended": null,
+    "refresh_cadence": "unknown"
+  },
+  "spatial": {
+    "coverage": [
+      "IT"
+    ],
+    "code_system": "ISO3166-1 alpha-2 country code (path parameter 'country')",
+    "notes": "National holidays only in the IT probes (global=true for all sampled entries, counties null). Regional patron-saint days and local closures are not visible in the probes."
+  },
+  "ownership": {
+    "owner": null,
+    "publisher": "Nager.Date (GitHub project nager/Nager.Date; API hosted at date.nager.at)",
+    "steward": null
+  },
+  "licence": {
+    "name": null,
+    "evidence": "Repository README and LICENSE: software is MIT licensed (licence_links '/nager/Nager.Date/blob/main/LICENSE'; README 'MIT license'), read via probe_url on https://github.com/nager/Nager.Date. No licence for the holiday data or the API output was found on the API docs page (https://date.nager.at/Api, not read) or the terms page; the register terms_url points to the GitHub repo. Data licence unknown.",
+    "url": "https://github.com/nager/Nager.Date",
+    "agreement_status": "not_required_open_data (register policy.open_data_links)",
+    "commercial_use": "unknown",
+    "attribution_text": null,
+    "mixed_sources": null
+  },
+  "access": {
+    "method": "rest_api",
+    "auth_required": false,
+    "reachable": true,
+    "classification": "public",
+    "approx_size_bytes": 2307,
+    "request_process": "GET https://date.nager.at/api/v3/PublicHolidays/{year}/{country}; no key observed in probes"
+  },
+  "declared_metadata": {
+    "has_missing_values": null,
+    "contains_pii": false,
+    "register_agreement_status": "not_required_open_data",
+    "register_approved_purposes": [
+      "prototyping",
+      "production"
+    ]
+  },
+  "documentation_excerpts": [
+    "Register param_notes: 'country is ISO 3166-1 alpha-2 (PT, GB, FR, ...).'",
+    "README (GitHub): 'Easily access public holidays for 200+ countries via .NET, REST API, Docker, or NuGet'; 'MIT license'.",
+    "README: hosted REST API at nagerholidays.com; self-hosted Docker variant uses /api/v4/Holidays/{country}/{year} (v4 path differs from the v3 path in the register)."
+  ],
+  "quality_notes": [
+    "Probe for IT 2025 returned 13 holidays, dates 2025-01-01 to 2025-12-26 (probe shape only shows 3 items plus '10 more'); probe for IT 2024 returned 13 holidays, dates 2024-01-01 to 2024-12-26. Both probes returned byte-identical sized responses (2307 bytes) and were served from cache.",
+    "Covers national holidays only; regional or local closures (e.g. patron-saint days, municipal closures of Valdena) are not covered, so the calendar is incomplete for a city-level covariate.",
+    "Register path template (/api/v3/PublicHolidays/{year}/{country}) differs from the self-hosted README example (/api/v4/Holidays/...). The probed v3 path works; API version stability not confirmed.",
+    "Register terms_url points to the GitHub repository (software MIT licence), not to a data-licence statement; the API's own terms were not read.",
+    "Calendar is a covariate only: it does not satisfy N4 (daily respiratory clinic counts by district); those must come from the city clinic data."
+  ],
+  "provenance": [
+    {
+      "claim": "Endpoint is registered as public_api, not_required_open_data, approved for prototyping and production, with path params year and country",
+      "evidence": "list_external_register (api.nager_public_holidays)"
+    },
+    {
+      "claim": "IT 2025 and IT 2024 probes return HTTP 200 JSON with 13 holiday records each, dates 2025-01-01..2025-12-26 and 2024-01-01..2024-12-26, global=true, counties=null",
+      "evidence": "call_public_api api.nager_public_holidays path {year:2025,country:IT} and {year:2024,country:IT}"
+    },
+    {
+      "claim": "Repository is MIT licensed (software); holiday data licence not stated in the README",
+      "evidence": "probe_url https://github.com/nager/Nager.Date (licence_snippets: 'MIT license', LICENSE link)"
+    },
+    {
+      "claim": "Self-hosted README documents a v4 path, and the register uses v3",
+      "evidence": "probe_url https://github.com/nager/Nager.Date (README text)"
+    }
+  ],
+  "unknowns": [
+    "Licence of the holiday data and API output (only software MIT licence seen); API docs page https://date.nager.at/Api not read",
+    "Owner, maintainer and SLA of the public-hosted API",
+    "Whether the hosted API is versioned/stable (v3 in register vs v4 in README)",
+    "Regional or municipal holidays for Valdena, not covered by the national feed",
+    "Data coverage before 2024 (prototype window not needed for N4, so not probed)",
+    "Refresh cadence and date of last holiday-list update",
+    "Whether the source is fit for production use given Legal sign-off is required for production use of external datasets (policy.open_data_links)"
+  ]
+}

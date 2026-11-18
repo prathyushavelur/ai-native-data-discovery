@@ -1,0 +1,37 @@
+{
+  "reviewer": "Prathyusha Velur",
+  "verdict": "proceed_with_conditions",
+  "conditions": [
+    {
+      "text": "Build and sign off pre/post-2024-04-01 product code crosswalk",
+      "owner": "Retail Operations",
+      "due": "2026-11-25"
+    },
+    {
+      "text": "Obtain commercial Open-Meteo subscription and Legal sign-off for production use",
+      "owner": "Shop Owner and Legal",
+      "due": "2026-11-25"
+    },
+    {
+      "text": "Confirm shop city coordinates and record in decisions.md",
+      "owner": "Valdena Gelato Shop",
+      "due": "2026-11-20"
+    }
+  ],
+  "agreements": [
+    {
+      "source_id": "internal.sales.daily_by_product",
+      "reason": "Agree it is feasible_with_conditions for N1 once warehouse access, closed-day encoding, and the 2024-04-01 product code crosswalk are resolved."
+    },
+    {
+      "source_id": "api.open_meteo_archive",
+      "reason": "Agree free tier is not feasible for commercial retail production (LIC-NONCOMMERCIAL) unless a commercial subscription and Legal clearance are secured."
+    }
+  ],
+  "overrides": [],
+  "traced_conclusion": {
+    "source_id": "api.nager_public_holidays",
+    "record_field": "licence.evidence",
+    "could_change_if": "Legal or Nager.Date provides an explicit open-data licence covering the holiday dataset itself (rather than only the MIT software repository) and 2025 holiday counts are verified."
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "flags": {
+    "api.nager_public_holidays": [
+      {
+        "code": "LIC-UNKNOWN",
+        "evidence": "No licence established. Evidence field: \"Repository README and LICENSE: software is MIT licensed (licence_links '/nager/Nager.Date/blob/main/LICENSE'; README 'MIT license'), read via probe_url on https://github.com/nager/Nager.Date. No licence for the holiday data or the API output was found on the API docs page (https://date.nager.at/Api, not read) or the terms page; the register terms_url points to the GitHub repo. Data licence unknown.\"",
+        "raised_by": "rule:rule_licence"
+      }
+    ],
+    "api.open_meteo_archive": [
+      {
+        "code": "LIC-ATTRIBUTION",
+        "evidence": "Licence 'CC BY 4.0' requires attribution",
+        "raised_by": "rule:rule_licence"
+      },
+      {
+        "code": "LIC-MIXED",
+        "evidence": "Record states that parts come from upstream providers with different terms",
+        "raised_by": "rule:rule_licence"
+      }
+    ],
+    "internal.airq.station_readings": [
+      {
+        "code": "ACC-RESTRICTED",
+        "evidence": "auth_required=True, classification=internal, process='Request to the Environment Monitoring Unit (catalog access.request_process). Location azure://valdena-health/env/station_readings. Not tested: no query or probe was run against the store.'",
+        "raised_by": "rule:rule_access"
+      }
+    ],
+    "internal.clinic.resp_visits_daily": [
+      {
+        "code": "ACC-RESTRICTED",
+        "evidence": "auth_required=True, classification=internal, process='Request to Clinical Analytics (catalog access.request_process). Not probed: store access was not tested.'",
+        "raised_by": "rule:rule_access"
+      }
+    ],
+    "internal.traffic.hourly_counts": [
+      {
+        "code": "ACC-RESTRICTED",
+        "evidence": "auth_required=True, classification=internal, process='Request to the Mobility Office (catalog access.request_process). Location azure://valdena-health/mobility/traffic_hourly. Reachability not tested in this profile.'",
+        "raised_by": "rule:rule_access"
+      }
+    ],
+    "link.data_open_air_chicago_hour_aggre_d4970b": [
+      {
+        "code": "LIC-UNKNOWN",
+        "evidence": "No licence established. Evidence field: 'Not read: inspect_dataset_link on https://catalog.data.gov/dataset/open-air-chicago-hour-aggregations returned DOMAIN_NOT_ALLOWLISTED.'",
+        "raised_by": "rule:rule_licence"
+      },
+      {
+        "code": "ACC-UNREACHABLE",
+        "evidence": "Record states the source could not be reached or restored",
+        "raised_by": "rule:rule_access"
+      }
+    ],
+    "link.europa_hlth_cd_iap_e7ca1d": [
+      {
+        "code": "LIC-UNKNOWN",
+        "evidence": "No licence established. Evidence field: 'probe_url on https://ec.europa.eu/eurostat/about/policies/copyright redirected to an EU Login page with no licence text. No licence statement found in inspect_dataset_link output. Eurostat is not listed in list_external_register, so no register terms apply. Licence unknown.'",
+        "raised_by": "rule:rule_licence"
+      },
+      {
+        "code": "COV-PARTIAL-WINDOW",
+        "evidence": "Coverage below 95% threshold: window prototype [2004-03-10..2005-04-04] vs record [2005-01-01..2023-12-31] (24.0% covered); window production [2024-01-01..2025-12-31] vs record [2005-01-01..2023-12-31] (0.0% covered)",
+        "raised_by": "rule:rule_temporal_coverage"
+      }
+    ],
+    "link.europa_sdg_11_52_099aa6": [
+      {
+        "code": "LIC-UNKNOWN",
+        "evidence": "No licence established. Evidence field: \"The Eurostat copyright and re-use page was reached (probe_url, https://ec.europa.eu/eurostat/web/main/help/copyright-notice, status 200, titled 'Copyright notice and free re-use of data'), but the extracted text was page script and did not show the licence wording. No licence statement was found in the JSON-stat response or the catalog. The licence is therefore not established.\"",
+        "raised_by": "rule:rule_licence"
+      },
+      {
+        "code": "COV-PARTIAL-WINDOW",
+        "evidence": "Coverage below 95% threshold: window prototype [2004-03-10..2005-04-04] vs record [2005-01-01..2023-12-31] (24.0% covered); window production [2024-01-01..2025-12-31] vs record [2005-01-01..2023-12-31] (0.0% covered)",
+        "raised_by": "rule:rule_temporal_coverage"
+      }
+    ],
+    "link.uci_360": [
+      {
+        "code": "LIC-ATTRIBUTION",
+        "evidence": "Licence 'CC BY 4.0' requires attribution",
+        "raised_by": "rule:rule_licence"
+      },
+      {
+        "code": "FRS-STALE",
+        "evidence": "Record end date 2005-04-04 is 21.5 years before uc as_of 2026-10-15 (limit 5y)",
+        "raised_by": "rule:rule_temporal_coverage"
+      },
+      {
+        "code": "DQ-METADATA-CONTRADICTION",
+        "evidence": "declared_metadata.has_missing_values='no' contradicts note: 'Missing values are tagged with -200 value.'",
+        "raised_by": "rule:rule_metadata_contradiction"
+      }
+    ]
+  },
+  "warnings": []
+}
